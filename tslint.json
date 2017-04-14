@@ -64,10 +64,12 @@
       "check-whitespace"
     ],
     "prefer-const": true,
+    /******* Commented out to avoid lint errors on VsCode-generated import statements
     "quotemark": [
       true,
       "single"
     ],
+    **********/
     "radix": true,
     "semicolon": [
       "always"
