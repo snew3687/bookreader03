@@ -1,3 +1,5 @@
+import { commonmark } from "commonmark";
+
 export namespace BookReaderClasses {
 
   export interface IBookLibrary<T> {
@@ -10,11 +12,11 @@ export namespace BookReaderClasses {
 
     }
   }
-  /**
-    export class ChapterEntry {
-      constructor (public chapterHeading: commonmark.Node, public chapterTextNodes: commonmark.Node[]) {}
-    }
-   */
+
+  export class ChapterEntry {
+    constructor(public chapterHeading: commonmark.Node, public chapterTextNodes: commonmark.Node[]) { }
+  }
+
   export class ChapterTitleDescriptor {
 
     constructor(
@@ -38,10 +40,7 @@ export namespace BookReaderClasses {
   }
 
   export class Book {
-    /**
-        constructor(public descriptor : BookDescriptor, public chapterSet : ChapterEntry[]) {
-        }
-     */
+    constructor(public descriptor: BookDescriptor, public chapterSet: ChapterEntry[]) {}
   }
 }
 

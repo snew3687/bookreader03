@@ -9,6 +9,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReaderComponent } from './reader/reader.component';
 import { BookmarkSummaryComponent } from './bookmark-summary/bookmark-summary.component';
 
+import { BookLibraryService } from "./book-library.service";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +24,7 @@ import { BookmarkSummaryComponent } from './bookmark-summary/bookmark-summary.co
     HttpModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ BookLibraryService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
