@@ -9,7 +9,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class BookLibraryService {
   readonly baseUrl = 'http://localhost:8080/';
-  readonly bookmarksUrl = this.baseUrl + 'books/all';
+  readonly bookmarksUrl = this.baseUrl + 'books/bookmarked';
 
   constructor(private http: Http) { }
 

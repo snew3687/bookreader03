@@ -6,7 +6,7 @@ import { ReaderComponent } from "./reader/reader.component";
 
 const routes: Route[] = [
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'reader', component: ReaderComponent },
+  { path: 'reader/:bookUri', component: ReaderComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 

@@ -12,13 +12,13 @@ import { BookLibraryService } from "../book-library.service";
 })
 export class BookmarkSummaryComponent implements OnInit {
 
-  bookmarks: BookReaderClasses.BookDescriptor[];
+  bookmarkedDescriptors: BookReaderClasses.BookDescriptor[];
 
   constructor(private bookLibraryService: BookLibraryService) { }
 
   ngOnInit() {
     this.bookLibraryService.findBookmarks()
-      .subscribe(bookmarks => this.bookmarks = bookmarks);
+      .subscribe(bookmarks => this.bookmarkedDescriptors = bookmarks);
   }
 
 }
