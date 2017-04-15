@@ -18,7 +18,7 @@ export class BookmarkSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.bookLibraryService.findBookmarks()
-      .then(bookmarks => this.bookmarks = bookmarks);
+      .subscribe(bookmarks => this.bookmarks = bookmarks);
   }
 
 }

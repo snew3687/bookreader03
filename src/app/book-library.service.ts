@@ -1,23 +1,41 @@
 import { Injectable } from '@angular/core';
-import { Http } from "@angular/http";
+import { Http, Response } from "@angular/http";
 import { BookReaderClasses } from "./BookReaderClasses/bookClasses";
-import 'rxjs/add/operator/toPromise';
+import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
 
 @Injectable()
 export class BookLibraryService {
-  private bookmarksUrl = 'books/bookmarked';
+  readonly baseUrl = 'http://localhost:8080/';
+  readonly bookmarksUrl = this.baseUrl + 'books/all';
 
   constructor(private http: Http) { }
 
-  findBookmarks(): Promise<BookReaderClasses.BookDescriptor[]> {
+  findBookmarks(): Observable<BookReaderClasses.BookDescriptor[]> {
     return this.http.get(this.bookmarksUrl)
-      .toPromise()
-      .then(response => response.json().data as BookReaderClasses.BookDescriptor[])
+      .map(this.extractArrayData)
       .catch(this.handleError);
   }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
+  private extractArrayData(res: Response) {
+    const body = res.json();
+    return body.data || body || [];
   }
+
+  private handleError(error: Response | any) {
+    // In a real world app, you might use a remote logging infrastructure
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
+  }
+
 }
