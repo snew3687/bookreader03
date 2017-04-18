@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 })
 export class ReaderComponent implements OnInit {
   bookUri: string;
-  
+
   constructor(
     private route: ActivatedRoute,
     private location: Location) { }

@@ -1,10 +1,10 @@
-<h2>Bookmarked</h2>
+<h1>Bookmarked</h1>
 <ul>
-    <li *ngFor="let bookDescriptor of bookmarkedDescriptors">
-      <a [routerLink]="['/reader', bookDescriptor.bookUri]">
-        <span class="authorName">{{bookDescriptor.Author}}</span> &#45;
-        <span class="bookTitle">{{bookDescriptor.Title}}</span> &nbsp;
-        <span class="bookmarkedChapter">&#40;Chapter&nbsp;{{bookDescriptor.bookmark.chapterIndex + 1}}&#41;</span>
-      </a>
-    </li>
+  <li *ngFor="let bookDescriptor of bookmarkedDescriptors">
+    <a [routerLink]="['/reader', bookDescriptor.bookUri]">
+      <span class="authorName">{{bookDescriptor.Author}}</span> &#45;
+      <span class="bookTitle">{{bookDescriptor.Title}}</span> &nbsp;
+      <span class="bookmarkedChapter">&#40;Chapter&nbsp;{{bookDescriptor.bookmark.chapterIndex + 1}}&#41;</span>
+    </a>
+  </li>
 </ul>

@@ -1,0 +1,9 @@
+:host {
+  flex: 6 6 60%;
+  max-width: 810px; 
+
+  /* New flex container for content */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: no-wrap;
+}

@@ -1,6 +1,7 @@
-<h1>
-  {{title}}
-</h1>
-<a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-<a routerLink="/reader/book_not_specified" routerLinkActive="active">Reader</a>
-<router-outlet></router-outlet>
+<div class="flex-master">
+  <div class="sidePanel">
+  </div>
+  <router-outlet></router-outlet>
+  <div class="sidePanel">
+  </div>
+</div>
