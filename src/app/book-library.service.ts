@@ -10,11 +10,18 @@ import 'rxjs/add/operator/catch';
 export class BookLibraryService {
   readonly baseUrl = 'http://localhost:8080/';
   readonly bookmarksUrl = this.baseUrl + 'books/bookmarked';
+  readonly topRatedUrl = this.baseUrl + 'books/toprated';
 
   constructor(private http: Http) { }
 
   findBookmarks(): Observable<BookReaderClasses.BookDescriptor[]> {
     return this.http.get(this.bookmarksUrl)
+      .map(this.extractArrayData)
+      .catch(this.handleError);
+  }
+
+  findTopRated(): Observable<BookReaderClasses.BookDescriptor[]> {
+    return this.http.get(this.topRatedUrl)
       .map(this.extractArrayData)
       .catch(this.handleError);
   }

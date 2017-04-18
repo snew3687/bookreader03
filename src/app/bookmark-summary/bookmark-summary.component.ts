@@ -11,7 +11,6 @@ import { BookLibraryService } from "../book-library.service";
   providers: [ BookLibraryService ]
 })
 export class BookmarkSummaryComponent implements OnInit {
-
   bookmarkedDescriptors: BookReaderClasses.BookDescriptor[];
 
   constructor(private bookLibraryService: BookLibraryService) { }

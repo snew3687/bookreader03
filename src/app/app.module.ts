@@ -11,6 +11,7 @@ import { BookmarkSummaryComponent } from './bookmark-summary/bookmark-summary.co
 
 import { BookLibraryService } from "./book-library.service";
 import { TopRatedSummaryComponent } from './top-rated-summary/top-rated-summary.component';
+import { FillPipe } from "./fill.pipe";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TopRatedSummaryComponent } from './top-rated-summary/top-rated-summary.
     DashboardComponent,
     ReaderComponent,
     BookmarkSummaryComponent,
-    TopRatedSummaryComponent
+    TopRatedSummaryComponent,
+    FillPipe
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,11 @@
+<h1>Top Rated</h1>
+<ul>
+  <li *ngFor="let bookDescriptor of topRatedDescriptors">
+    <a [routerLink]="['/reader', bookDescriptor.bookUri]">
+      <span class="authorName">{{bookDescriptor.Author}}</span> &#45;
+      <span class="bookTitle">{{bookDescriptor.Title}}</span> &nbsp;
+    </a>
+    <img *ngFor="let num of bookDescriptor.rating | fill" class="ratingStar" src="..\..\assets\images\rating-Star.png" />
+    <!--<span *ngFor="let num of arr(bookDescriptor.rating).fill(1)" >X</span>-->
+  </li>
+</ul>
