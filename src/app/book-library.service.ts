@@ -26,10 +26,27 @@ export class BookLibraryService {
       .catch(this.handleError);
   }
 
+  findBookDescriptor(currentBookUri: string): Observable<BookReaderClasses.BookDescriptor> {
+    const bookDescriptorUrl =  this.baseUrl + "books/" + currentBookUri + "?chapterTitles=true";
+    return this.http.get(bookDescriptorUrl)
+      .map(this.extractObjectData)
+      .catch(this.handleError);
+  }
+
+  private extractObjectData(res: Response) {
+    const body = res.json();
+    return body.data || body || {};
+  }
+
   private extractArrayData(res: Response) {
     const body = res.json();
     return body.data || body || [];
   }
+
+  // private extractData(res: Response, defaultNoResultValue: any) {
+  //   const body = res.json();
+  //   return body.data || body || defaultNoResultValue;
+  // }
 
   private handleError(error: Response | any) {
     // In a real world app, you might use a remote logging infrastructure

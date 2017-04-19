@@ -1,3 +1,37 @@
-<p>
-  Reading for URI - {{bookUri}}
-</p>
+<div *ngIf="bookDescriptor" id="bookHeader">
+  <div id="bookTitleContainer">
+    <h1 id="bookTitle">{{bookDescriptor.Title}}</h1>
+  </div>
+  <div id="bookAuthor">{{bookDescriptor.Author}}</div>
+
+  <div id="chapterControlContainer">
+    <a class="chapterControl" id="chapterControlFirst" href="#">First Ch</a>
+    <a class="chapterControl" id="chapterControlPrevious" href="#">Prev Ch</a>
+    <a class="chapterControl" id="chapterControlNext" href="#">Next Ch</a>
+    <a class="chapterControl" id="chapterControlLast" href="#">Last Ch</a>
+
+    <a id="pageControlPrevious" href="#">Previous Page</a>
+    <a id="pageControlNext" href="#">Next Page</a>
+
+    <select id="chapterControlNumber">
+              <option value="NO_CHAPTER" selected>Select Chapter</option>
+            </select>
+
+    <div id="ratingSelectionContainer">
+      <span class="ratingFieldName">Rating:</span>
+      <select id="bookRatingSelector">
+                <option value="0" selected="selected">--</option>
+                <option value="1">*</option>
+                <option value="2">**</option>
+                <option value="3">***</option>
+                <option value="4">****</option>
+                <option value="5">*****</option>
+              </select>
+    </div>
+
+    <a id="bookmarkSet" href="#">Bookmark</a>
+    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+  </div>
+  <!-- id="chapterControlContainer" -->
+</div>
+<!-- id="bookHeader" -->

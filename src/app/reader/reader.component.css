@@ -1,0 +1,43 @@
+div#bookHeader {
+  flex: none; /* Fixed size */
+  border-style: solid; 
+  border-width: 1;
+  border-color: gray;
+  background: aliceblue;
+}
+
+div#bookTitleContainer {
+  display: inline;
+}
+
+div#ratingSelectionContainer {
+  display: inline;
+}
+
+/* These controls are probably redundant now. Hidden until they are removed */
+a.chapterControl {
+  display : none;
+}
+
+#bookTitle {
+  display: inline;
+}
+
+div#bookAuthor {
+  display: inline;
+}
+
+div#chapterControlContainer {
+  border-style: double solid;
+  border-width: 2;
+  border-color: gray;
+  background-color: lightsteelblue;
+}
+
+/*.navHome {
+
+}*/
+
+.chapterHeader {
+  font-weight: bold;
+}
