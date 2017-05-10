@@ -14,7 +14,8 @@
     <a id="pageControlNext" href="#">Next Page</a>
 
     <select id="chapterControlNumber">
-              <option value="NO_CHAPTER" selected>Select Chapter</option>
+              <option *ngFor="let titleDescriptor of bookDescriptor.chapterTitles" 
+                value="{{titleDescriptor.chapterIndex}}">{{titleDescriptor.titleText}}</option>
             </select>
 
     <div id="ratingSelectionContainer">
