@@ -12,7 +12,7 @@ export class BookLibraryService {
   readonly bookmarksUrl = this.baseUrl + 'books/bookmarked';
   readonly topRatedUrl = this.baseUrl + 'books/toprated';
 
-  constructor(private http: Http) { }
+  constructor(private     http: Http) { }
 
   findBookmarks(): Observable<BookReaderClasses.BookDescriptor[]> {
     return this.http.get(this.bookmarksUrl)
@@ -30,6 +30,13 @@ export class BookLibraryService {
     const bookDescriptorUrl =  this.baseUrl + "books/" + currentBookUri + "?chapterTitles=true";
     return this.http.get(bookDescriptorUrl)
       .map(this.extractObjectData)
+      .catch(this.handleError);
+  }
+
+  findBookChapter(currentBookUri: string, chapterNumber: number): Observable<string> {
+    const bookChapterUrl = this.baseUrl + "books/" + currentBookUri + "/chapter/" + chapterNumber;
+    return this.http.get(bookChapterUrl)
+      .map(res => res.text())
       .catch(this.handleError);
   }
 

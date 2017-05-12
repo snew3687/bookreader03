@@ -9,20 +9,21 @@ import { BookReaderClasses } from "../BookReaderClasses/bookClasses";
 import { BookLibraryService } from "../book-library.service";
 
 @Injectable()
-export class BookResolver implements Resolve<BookReaderClasses.BookDescriptor> {
+export class ChapterResolver implements Resolve<string> {
   constructor(
     private bookLibraryService: BookLibraryService,
     private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<BookReaderClasses.BookDescriptor> {
-    const bookUri = route.params['bookUri'];
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> {
+    const bookUri = route.parent.params['bookUri'];
+    const chapterNumber = route.params['chapterNumber'];
 
-    return this.bookLibraryService.findBookDescriptor(bookUri)
-      .map(descriptor => {
-        if (descriptor) {
-          return descriptor;
+    return this.bookLibraryService.findBookChapter(bookUri, chapterNumber)
+      .map(chapterContent => {
+        if (chapterContent) {
+          return chapterContent;
         }
-        console.log(`BookDescriptor was not found: ${bookUri}`);
+        console.log(`Chapter content was not found: ${bookUri}, Chapter: ${chapterNumber}`);
         this.router.navigate(['/dashboard']);
         return null;
       })
@@ -32,4 +33,5 @@ export class BookResolver implements Resolve<BookReaderClasses.BookDescriptor> {
         return Observable.of(null);
       });
   }
+
 }

@@ -12,6 +12,7 @@ import { BookmarkSummaryComponent } from './bookmark-summary/bookmark-summary.co
 import { BookLibraryService } from "./book-library.service";
 import { TopRatedSummaryComponent } from './top-rated-summary/top-rated-summary.component';
 import { FillPipe } from "./fill.pipe";
+import { ReadingAreaComponent } from './reading-area/reading-area.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FillPipe } from "./fill.pipe";
     ReaderComponent,
     BookmarkSummaryComponent,
     TopRatedSummaryComponent,
-    FillPipe
+    FillPipe,
+    ReadingAreaComponent
   ],
   imports: [
     BrowserModule,
