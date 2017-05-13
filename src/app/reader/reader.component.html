@@ -13,10 +13,10 @@
     <a id="pageControlPrevious" href="#">Previous Page</a>
     <a id="pageControlNext" href="#">Next Page</a>
 
-    <select id="chapterControlNumber">
-              <option *ngFor="let titleDescriptor of bookDescriptor.chapterTitles" 
+    <select id="chapterControlNumber" (change)="handleSelectChapter($event.target.value)">
+      <option *ngFor="let titleDescriptor of bookDescriptor.chapterTitles" 
                 value="{{titleDescriptor.chapterIndex}}">{{titleDescriptor.titleText}}</option>
-            </select>
+    </select>
 
     <div id="ratingSelectionContainer">
       <span class="ratingFieldName">Rating:</span>

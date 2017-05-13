@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { BookReaderClasses } from "../BookReaderClasses/bookClasses";
 import { BookLibraryService } from "../book-library.service";
@@ -15,10 +15,14 @@ export class ReaderComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private bookLibraryService: BookLibraryService) { }
 
   ngOnInit() {
     this.bookDescriptor = this.route.snapshot.data['bookDescriptor'];
   }
 
+  handleSelectChapter(chapterIndex: number) {
+    this.router.navigate(['chapter', chapterIndex], { relativeTo: this.route });
+  }
 }

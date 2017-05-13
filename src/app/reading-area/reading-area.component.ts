@@ -17,8 +17,7 @@ export class ReadingAreaComponent implements OnInit {
     private bookLibraryService: BookLibraryService) { }
 
   ngOnInit() {
-    // TODO: This needs to subscribe to an Observable, to cope with changing chapters within component
-    this.chapterContent = this.route.snapshot.data['chapterContent'];
+    this.route.data.subscribe(data => this.chapterContent = data['chapterContent']);
   }
 
 }
