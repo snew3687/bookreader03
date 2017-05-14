@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BookReaderClasses } from "../BookReaderClasses/bookClasses";
 import { BookLibraryService } from "../book-library.service";
+import { ReaderStateService } from "./reader-state.service";
 
 @Component({
   selector: 'br03-reader',
@@ -12,14 +13,18 @@ import { BookLibraryService } from "../book-library.service";
 })
 export class ReaderComponent implements OnInit {
   bookDescriptor: BookReaderClasses.BookDescriptor;
+  currentChapterIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private bookLibraryService: BookLibraryService) { }
+    private bookLibraryService: BookLibraryService,
+    private readerStateService: ReaderStateService) { }
 
   ngOnInit() {
     this.bookDescriptor = this.route.snapshot.data['bookDescriptor'];
+    this.readerStateService.chapterIndexChangeEmitted$.subscribe(chapterIndex =>
+      this.currentChapterIndex = chapterIndex);
   }
 
   handleSelectChapter(chapterIndex: number) {

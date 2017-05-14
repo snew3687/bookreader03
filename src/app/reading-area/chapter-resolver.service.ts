@@ -16,14 +16,14 @@ export class ChapterResolver implements Resolve<string> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> {
     const bookUri = route.parent.params['bookUri'];
-    const chapterNumber = route.params['chapterNumber'];
+    const chapterIndex = route.params['chapterIndex'];
 
-    return this.bookLibraryService.findBookChapter(bookUri, chapterNumber)
+    return this.bookLibraryService.findBookChapter(bookUri, chapterIndex)
       .map(chapterContent => {
         if (chapterContent) {
           return chapterContent;
         }
-        console.log(`Chapter content was not found: ${bookUri}, Chapter: ${chapterNumber}`);
+        console.log(`Chapter content was not found: ${bookUri}, Chapter: ${chapterIndex}`);
         this.router.navigate(['/dashboard']);
         return null;
       })

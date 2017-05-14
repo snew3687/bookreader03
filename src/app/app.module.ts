@@ -10,6 +10,7 @@ import { ReaderComponent } from './reader/reader.component';
 import { BookmarkSummaryComponent } from './bookmark-summary/bookmark-summary.component';
 
 import { BookLibraryService } from "./book-library.service";
+import { ReaderStateService } from "./reader/reader-state.service";
 import { TopRatedSummaryComponent } from './top-rated-summary/top-rated-summary.component';
 import { FillPipe } from "./fill.pipe";
 import { ReadingAreaComponent } from './reading-area/reading-area.component';
@@ -30,7 +31,7 @@ import { ReadingAreaComponent } from './reading-area/reading-area.component';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [ BookLibraryService ],
+  providers: [ BookLibraryService, ReaderStateService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

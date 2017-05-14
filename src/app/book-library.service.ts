@@ -33,8 +33,8 @@ export class BookLibraryService {
       .catch(this.handleError);
   }
 
-  findBookChapter(currentBookUri: string, chapterNumber: number): Observable<string> {
-    const bookChapterUrl = this.baseUrl + "books/" + currentBookUri + "/chapter/" + chapterNumber;
+  findBookChapter(currentBookUri: string, chapterIndex: number): Observable<string> {
+    const bookChapterUrl = this.baseUrl + "books/" + currentBookUri + "/chapter/" + chapterIndex;
     return this.http.get(bookChapterUrl)
       .map(res => res.text())
       .catch(this.handleError);

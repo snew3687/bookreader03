@@ -20,7 +20,7 @@ const routes: Route[] = [
         pathMatch: 'full'
       },
       {
-        path: 'chapter/:chapterNumber',
+        path: 'chapter/:chapterIndex',
         component: ReadingAreaComponent,
         resolve: { chapterContent: ChapterResolver}
       }
