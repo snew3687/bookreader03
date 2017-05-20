@@ -14,6 +14,8 @@ import { ReaderStateService } from "./reader-state.service";
 export class ReaderComponent implements OnInit {
   bookDescriptor: BookReaderClasses.BookDescriptor;
   currentChapterIndex = 0;
+  currentFirstParagraphIndex = 0;
+  currentLastParagraphIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +28,14 @@ export class ReaderComponent implements OnInit {
     this.currentChapterIndex = this.readerStateService.currentChapterIndex;
     this.readerStateService.chapterIndexChangeEmitted$.subscribe(chapterIndex =>
       this.currentChapterIndex = chapterIndex);
+    this.readerStateService.indexParagraphFirstChangeEmitted$.subscribe(paragraphIndex =>
+      this.currentFirstParagraphIndex = paragraphIndex);
+    this.readerStateService.indexParagraphLastChangeEmitted$.subscribe(paragraphIndex =>
+      this.currentLastParagraphIndex = paragraphIndex);
+  }
+
+  get bookUri(): string {
+    return this.bookDescriptor.bookUri;
   }
 
   handleSelectChapter(chapterIndex: number) {

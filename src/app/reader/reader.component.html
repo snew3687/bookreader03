@@ -11,7 +11,7 @@
     <a class="chapterControl" id="chapterControlLast" href="#">Last Ch</a>
 
     <a id="pageControlPrevious" routerLink="/page/previous" href="#">Previous Page</a>
-    <a id="pageControlNext" routerLink="/page/next" href="#">Next Page</a>
+    <a id="pageControlNext" [routerLink]="['/reader', bookUri, 'chapter', currentChapterIndex,'para', currentLastParagraphIndex + 1]" href="#">Next Page</a>
 
     <select id="chapterControlNumber" [ngModel]="currentChapterIndex"
         (change)="handleSelectChapter($event.target.value)">

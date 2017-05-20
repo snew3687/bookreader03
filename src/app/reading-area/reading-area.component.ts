@@ -16,6 +16,8 @@ export class ReadingAreaComponent implements OnInit {
   chapterContent: string;
   areaScrollHeight = 0;
   areaHeight = 0;
+  indexParagraphFirst = 0;
+  indexParagraphLast = 0;
 
   @ViewChild('readingAreaContainer') readingAreaContainer: ElementRef;
 
@@ -27,16 +29,11 @@ export class ReadingAreaComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => this.handleRouteParamsChange(params));
-    this.route.data.subscribe(data => this.handleComponentNavigatedTo(data));
   }
 
   private handleRouteParamsChange(params) {
-    if (params['paragraphIndex']) {
-      // TODO: Implement display from specify paragraph
-    }
-  }
+    this.indexParagraphFirst = params['paragraphIndex'] || 0;
 
-  private handleComponentNavigatedTo(data: any) {
     this.displayChapterContent();
   }
 
@@ -47,18 +44,22 @@ export class ReadingAreaComponent implements OnInit {
     const bodyNode = htmlNode.children[1]; // Skip past <html> node
     this.chapterContent = "";
 
-    for (let index = 0; index < bodyNode.children.length; index++) {
+    this.indexParagraphLast = this.indexParagraphFirst - 1;
+    for (let index = this.indexParagraphFirst; index < bodyNode.children.length; index++) {
       const chapterContentWithoutNextParagraph = this.chapterContent;
       const element = bodyNode.children[index];
       this.chapterContent += element.outerHTML;
+      this.indexParagraphLast++;
 
       this.ref.detectChanges();
 
       if (this.isReadingContainerLargerThanPage()) {
         this.chapterContent = chapterContentWithoutNextParagraph;
+        this.indexParagraphLast--;
         break;
       }
     }
+    this.readerStateService.setParagraphIndexes(this.indexParagraphFirst, this.indexParagraphLast);
   }
 
   private isReadingContainerLargerThanPage(): boolean {
