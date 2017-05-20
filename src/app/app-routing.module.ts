@@ -23,6 +23,16 @@ const routes: Route[] = [
         path: 'chapter/:chapterIndex',
         component: ReadingAreaComponent,
         resolve: { chapterContent: ChapterResolver}
+      },
+      {
+        path: 'chapter/:chapterIndex/para/:paragraphIndex',
+        component: ReadingAreaComponent,
+        resolve: { isResolved: ChapterResolver}
+      },
+      {
+        path: 'chapter/:chapterIndex/para/:paragraphIndex/:pagingDirection',
+        component: ReadingAreaComponent,
+        resolve: { chapterContent: ChapterResolver}
       }
     ]
   },

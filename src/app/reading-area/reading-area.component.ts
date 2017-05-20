@@ -1,6 +1,5 @@
 import { Component, OnInit, ApplicationRef } from '@angular/core';
 import { ChangeDetectorRef } from "@angular/core";
-//import { NgZone } from "@angular/core";
 import { ActivatedRoute } from '@angular/router';
 import { ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 
@@ -17,27 +16,33 @@ export class ReadingAreaComponent implements OnInit {
   chapterContent: string;
   areaScrollHeight = 0;
   areaHeight = 0;
-  chapterContentAsDocument: HTMLDocument;
 
   @ViewChild('readingAreaContainer') readingAreaContainer: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef,
-    //private zone: NgZone,
     private bookLibraryService: BookLibraryService,
     private readerStateService: ReaderStateService) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params =>
-      this.readerStateService.emitChapterIndexChange(+params['chapterIndex']));
-    this.route.data.subscribe(data => this.storeAndDisplayChapterContent(data['chapterContent']));
+    this.route.params.subscribe(params => this.handleRouteParamsChange(params));
+    this.route.data.subscribe(data => this.handleComponentNavigatedTo(data));
   }
 
-  private storeAndDisplayChapterContent(chapterContentHtmlAsText: string) {
-    const parser = new DOMParser();
-    this.chapterContentAsDocument = parser.parseFromString(chapterContentHtmlAsText, "text/html");
+  private handleRouteParamsChange(params) {
+    if (params['paragraphIndex']) {
+      // TODO: Implement display from specify paragraph
+    }
+  }
 
+  private handleComponentNavigatedTo(data: any) {
+    this.displayChapterContent();
+  }
+
+  get chapterContentAsDocument(): HTMLDocument { return this.readerStateService.currentChapterContentAsDocument; }
+
+  private displayChapterContent() {
     const htmlNode = this.chapterContentAsDocument.children[0];
     const bodyNode = htmlNode.children[1]; // Skip past <html> node
     this.chapterContent = "";
@@ -57,8 +62,8 @@ export class ReadingAreaComponent implements OnInit {
   }
 
   private isReadingContainerLargerThanPage(): boolean {
-    let div = this.readingAreaContainer.nativeElement;
-    let divOffsetBottom = div.offsetTop + div.clientHeight;
+    const div = this.readingAreaContainer.nativeElement;
+    const divOffsetBottom = div.offsetTop + div.clientHeight;
     return divOffsetBottom > document.body.clientHeight;
-  } 
+  }
 }

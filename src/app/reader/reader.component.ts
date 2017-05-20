@@ -23,6 +23,7 @@ export class ReaderComponent implements OnInit {
 
   ngOnInit() {
     this.bookDescriptor = this.route.snapshot.data['bookDescriptor'];
+    this.currentChapterIndex = this.readerStateService.currentChapterIndex;
     this.readerStateService.chapterIndexChangeEmitted$.subscribe(chapterIndex =>
       this.currentChapterIndex = chapterIndex);
   }
