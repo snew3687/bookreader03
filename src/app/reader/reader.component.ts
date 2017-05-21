@@ -21,7 +21,7 @@ export class ReaderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private bookLibraryService: BookLibraryService,
-    private readerStateService: ReaderStateService) { 
+    private readerStateService: ReaderStateService) {
       this.currentChapterIndex = 0;
       this.currentFirstParagraphIndex = 0;
       this.currentLastParagraphIndex = 0;
@@ -30,12 +30,14 @@ export class ReaderComponent implements OnInit {
   ngOnInit() {
     this.bookDescriptor = this.route.snapshot.data['bookDescriptor'];
     this.currentChapterIndex = this.readerStateService.currentChapterIndex;
+    
     this.readerStateService.chapterIndexChangeEmitted$.subscribe(chapterIndex =>
       this.currentChapterIndex = chapterIndex);
-    this.readerStateService.indexParagraphFirstChangeEmitted$.subscribe(paragraphIndex =>
-      this.currentFirstParagraphIndex = paragraphIndex);
-    this.readerStateService.indexParagraphLastChangeEmitted$.subscribe(paragraphIndex =>
-      this.currentLastParagraphIndex = paragraphIndex);
+
+    this.readerStateService.pageParagraphsChangeEmitted$.subscribe(paragraphInfo => {
+      this.currentFirstParagraphIndex = paragraphInfo.firstParagraphIndex;
+      this.currentLastParagraphIndex = paragraphInfo.lastParagraphIndex;
+    });
   }
 
   get bookUri(): string {
@@ -48,7 +50,7 @@ export class ReaderComponent implements OnInit {
 
   handleClickNextPage() {
     const nextPageFirstParagraphIndex = this.currentLastParagraphIndex + 1;
-    
+   
     if (nextPageFirstParagraphIndex < this.currentChapterParagraphCount()) {
       this.navigateToParagraph(nextPageFirstParagraphIndex);
     } else if (this.currentChapterIndex + 1 < this.bookDescriptor.chapterCount) {

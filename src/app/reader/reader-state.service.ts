@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
 
+export class PageParagraphInfo {
+  constructor(
+    readonly firstParagraphIndex: number,
+    readonly lastParagraphIndex: number) {}
+}
+
 @Injectable()
 export class ReaderStateService {
   private emitChapterIndexChangeSource = new Subject<number>();
-  private emitIndexParagraphFirstChangeSource = new Subject<number>();
-  private emitIndexParagraphLastChangeSource = new Subject<number>();
+  private emitPageParagraphsChangeSource = new Subject<PageParagraphInfo>();
   chapterIndexChangeEmitted$ = this.emitChapterIndexChangeSource.asObservable();
-  indexParagraphFirstChangeEmitted$ = this.emitIndexParagraphFirstChangeSource.asObservable();
-  indexParagraphLastChangeEmitted$ = this.emitIndexParagraphLastChangeSource.asObservable();
+  pageParagraphsChangeEmitted$ = this.emitPageParagraphsChangeSource.asObservable();
   currentChapterContentAsDocument: HTMLDocument;
   private _currentChapterIndex: number;
   private _currentParagraphFirstIndex: number;
@@ -27,8 +31,10 @@ export class ReaderStateService {
   }
 
   get currentChapterParagraphCount(): number {
-    if (!this.currentChapterContentAsDocument) return 0;
-    
+    if (!this.currentChapterContentAsDocument) {
+      return 0;
+    }
+
     const htmlNode = this.currentChapterContentAsDocument.children[0];
     const bodyNode = htmlNode.children[1]; // Skip past <html> node
     return bodyNode.children.length;
@@ -37,19 +43,15 @@ export class ReaderStateService {
   setParagraphIndexes(indexParagraphFirst: number, indexParagraphLast: number) {
     this._currentParagraphFirstIndex = indexParagraphFirst;
     this._currentParagraphLastIndex = indexParagraphLast;
-    this.emitParagraphFirstIndexChange(indexParagraphFirst);
-    this.emitParagraphLastIndexChange(indexParagraphLast);
+    this.emitPageParagraphsChange();
   }
 
   emitChapterIndexChange(chapterIndex: number) {
     this.emitChapterIndexChangeSource.next(chapterIndex);
   }
 
-  emitParagraphFirstIndexChange(paragraphIndex: number) {
-    this.emitIndexParagraphFirstChangeSource.next(paragraphIndex);
-  }
-
-  emitParagraphLastIndexChange(paragraphIndex: number) {
-    this.emitIndexParagraphLastChangeSource.next(paragraphIndex);
+  emitPageParagraphsChange() {
+    this.emitPageParagraphsChangeSource.next(
+      new PageParagraphInfo(this._currentParagraphFirstIndex, this._currentParagraphLastIndex));
   }
 }
