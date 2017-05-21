@@ -32,7 +32,7 @@ export class ReadingAreaComponent implements OnInit {
   }
 
   private handleRouteParamsChange(params) {
-    this.indexParagraphFirst = params['paragraphIndex'] || 0;
+    this.indexParagraphFirst = +params['paragraphIndex'] || 0;
 
     this.displayChapterContent();
   }

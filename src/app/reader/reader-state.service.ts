@@ -26,6 +26,14 @@ export class ReaderStateService {
     this.emitChapterIndexChange(chapterIndex);
   }
 
+  get currentChapterParagraphCount(): number {
+    if (!this.currentChapterContentAsDocument) return 0;
+    
+    const htmlNode = this.currentChapterContentAsDocument.children[0];
+    const bodyNode = htmlNode.children[1]; // Skip past <html> node
+    return bodyNode.children.length;
+  }
+
   setParagraphIndexes(indexParagraphFirst: number, indexParagraphLast: number) {
     this._currentParagraphFirstIndex = indexParagraphFirst;
     this._currentParagraphLastIndex = indexParagraphLast;

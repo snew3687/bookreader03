@@ -18,7 +18,7 @@ export class ChapterResolver implements Resolve<boolean> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const bookUri = route.parent.params['bookUri'];
-    const chapterIndex = route.params['chapterIndex'];
+    const chapterIndex = +route.params['chapterIndex'];
 
     if (this.readerStateService.currentChapterIndex === chapterIndex
     && !this.readerStateService.currentChapterContentAsDocument) {
