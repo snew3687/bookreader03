@@ -30,7 +30,7 @@ const routes: Route[] = [
         resolve: { isResolved: ChapterResolver}
       },
       {
-        path: 'chapter/:chapterIndex/para/:paragraphIndex/:pagingDirection',
+        path: 'chapter/:chapterIndex/para/:paragraphIndex/paging/:pagingDirection',
         component: ReadingAreaComponent,
         resolve: { chapterContent: ChapterResolver}
       }

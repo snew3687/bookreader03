@@ -10,6 +10,7 @@ export class PageParagraphInfo {
 
 @Injectable()
 export class ReaderStateService {
+  readonly IndexIndicatingChapterFinalParagraph = 999999;
   private emitChapterIndexChangeSource = new Subject<number>();
   private emitPageParagraphsChangeSource = new Subject<PageParagraphInfo>();
   chapterIndexChangeEmitted$ = this.emitChapterIndexChangeSource.asObservable();

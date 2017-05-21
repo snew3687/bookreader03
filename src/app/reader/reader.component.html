@@ -10,7 +10,7 @@
     <a class="chapterControl" id="chapterControlNext" href="#">Next Ch</a>
     <a class="chapterControl" id="chapterControlLast" href="#">Last Ch</a>
 
-    <a id="pageControlPrevious" routerLink="/page/previous" href="#">Previous Page</a>
+    <a id="pageControlPrevious" (click)="$event.preventDefault(); handleClickPreviousPage()" href="#">Previous Page</a>
     <a id="pageControlNext" (click)="$event.preventDefault(); handleClickNextPage()" href="#">Next Page</a>
 
     <select id="chapterControlNumber" [ngModel]="currentChapterIndex"

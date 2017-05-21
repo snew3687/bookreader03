@@ -30,7 +30,7 @@ export class ReaderComponent implements OnInit {
   ngOnInit() {
     this.bookDescriptor = this.route.snapshot.data['bookDescriptor'];
     this.currentChapterIndex = this.readerStateService.currentChapterIndex;
-    
+
     this.readerStateService.chapterIndexChangeEmitted$.subscribe(chapterIndex =>
       this.currentChapterIndex = chapterIndex);
 
@@ -48,9 +48,22 @@ export class ReaderComponent implements OnInit {
     this.router.navigate(['chapter', chapterIndex], { relativeTo: this.route });
   }
 
+  handleClickPreviousPage() {
+    const prevPageLastParagraphIndex = this.currentFirstParagraphIndex - 1;
+    if (prevPageLastParagraphIndex < 0) {
+      if (this.currentChapterIndex === 0) {
+        // Do nothing. Cannot navigate back from start of book
+      } else {
+        this.navigateToPreviousChapterFinalPage();
+      }
+    } else {
+      this.navigateToPageEndingWithParagraph(prevPageLastParagraphIndex);
+    }
+  }
+
   handleClickNextPage() {
     const nextPageFirstParagraphIndex = this.currentLastParagraphIndex + 1;
-   
+
     if (nextPageFirstParagraphIndex < this.currentChapterParagraphCount()) {
       this.navigateToParagraph(nextPageFirstParagraphIndex);
     } else if (this.currentChapterIndex + 1 < this.bookDescriptor.chapterCount) {
@@ -58,6 +71,17 @@ export class ReaderComponent implements OnInit {
     } else {
       // Do nothing. Cannot navigate further
     }
+  }
+
+  private navigateToPreviousChapterFinalPage() {
+    const chapterFinalParagraphIndex = this.readerStateService.IndexIndicatingChapterFinalParagraph;
+    this.router.navigate(
+        ['reader', this.bookUri, 'chapter', this.currentChapterIndex - 1, 'para', chapterFinalParagraphIndex, 'paging', 'backward' ]);
+  }
+
+  private navigateToPageEndingWithParagraph(paragraphIndex: number) {
+    this.router.navigate(
+        ['reader', this.bookUri, 'chapter', this.currentChapterIndex, 'para', paragraphIndex, 'paging', 'backward' ]);
   }
 
   private navigateToParagraph(paragraphIndex: number) {

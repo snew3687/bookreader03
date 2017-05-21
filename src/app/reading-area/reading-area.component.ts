@@ -13,7 +13,7 @@ import { ReaderStateService } from "../reader/reader-state.service";
   providers: [BookLibraryService]
 })
 export class ReadingAreaComponent implements OnInit {
-  chapterContent: string;
+  pageContent: string;
   areaScrollHeight = 0;
   areaHeight = 0;
   indexParagraphFirst = 0;
@@ -32,29 +32,69 @@ export class ReadingAreaComponent implements OnInit {
   }
 
   private handleRouteParamsChange(params) {
-    this.indexParagraphFirst = +params['paragraphIndex'] || 0;
+    const pagingDirection = params['pagingDirection'] || 'forward';
 
-    this.displayChapterContent();
+    if (pagingDirection === 'backward') {
+      this.indexParagraphLast = +params['paragraphIndex'] || 0;
+      if (this.isChapterFinalParagraph(this.indexParagraphLast)) {
+        this.indexParagraphLast = this.readerStateService.currentChapterParagraphCount - 1;
+      }
+      this.buildPageContentForPreviousParagraphs();
+    } else {
+      this.indexParagraphFirst = +params['paragraphIndex'] || 0;
+      this.buildPageContentForNextParagraphs();
+    }
+  }
+
+  private isChapterFinalParagraph(paragraphIndex: number) {
+    return paragraphIndex === this.readerStateService.IndexIndicatingChapterFinalParagraph;
   }
 
   get chapterContentAsDocument(): HTMLDocument { return this.readerStateService.currentChapterContentAsDocument; }
 
-  private displayChapterContent() {
+  private getChapterHtmlParagraphs(): HTMLCollection {
     const htmlNode = this.chapterContentAsDocument.children[0];
     const bodyNode = htmlNode.children[1]; // Skip past <html> node
-    this.chapterContent = "";
+    return bodyNode.children;
+  }
+
+  private buildPageContentForPreviousParagraphs() {
+    const htmlParagraphs = this.getChapterHtmlParagraphs();
+    this.pageContent = "";
+
+    this.indexParagraphFirst = this.indexParagraphLast;
+    for (let index = this.indexParagraphLast; index >= 0; index--) {
+      const chapterContentWithoutPreviousParagraph = this.pageContent;
+      const element = htmlParagraphs[index];
+      this.pageContent = element.outerHTML + this.pageContent;
+      this.indexParagraphFirst--;
+
+      this.ref.detectChanges();
+
+      if (this.isReadingContainerLargerThanPage()) {
+        this.pageContent = chapterContentWithoutPreviousParagraph;
+        this.indexParagraphFirst++;
+        break;
+      }
+    }
+    this.readerStateService.setParagraphIndexes(this.indexParagraphFirst, this.indexParagraphLast);
+  }
+
+  private buildPageContentForNextParagraphs() {
+    const htmlParagraphs = this.getChapterHtmlParagraphs();
+    this.pageContent = "";
 
     this.indexParagraphLast = this.indexParagraphFirst - 1;
-    for (let index = this.indexParagraphFirst; index < bodyNode.children.length; index++) {
-      const chapterContentWithoutNextParagraph = this.chapterContent;
-      const element = bodyNode.children[index];
-      this.chapterContent += element.outerHTML;
+    for (let index = this.indexParagraphFirst; index < htmlParagraphs.length; index++) {
+      const chapterContentWithoutNextParagraph = this.pageContent;
+      const element = htmlParagraphs[index];
+      this.pageContent += element.outerHTML;
       this.indexParagraphLast++;
 
       this.ref.detectChanges();
 
       if (this.isReadingContainerLargerThanPage()) {
-        this.chapterContent = chapterContentWithoutNextParagraph;
+        this.pageContent = chapterContentWithoutNextParagraph;
         this.indexParagraphLast--;
         break;
       }
