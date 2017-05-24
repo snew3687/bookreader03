@@ -36,17 +36,28 @@ export class ReadingAreaComponent implements OnInit {
 
     if (pagingDirection === 'backward') {
       this.indexParagraphLast = +params['paragraphIndex'] || 0;
-      if (this.isChapterFinalParagraph(this.indexParagraphLast)) {
-        this.indexParagraphLast = this.readerStateService.currentChapterParagraphCount - 1;
+      if (this.isIndicatingChapterFinalParagraph(this.indexParagraphLast)) {
+        this.pageThroughToChapterUpToFinalPage();
+      } else {
+        this.buildPageContentForPreviousParagraphs();
       }
-      this.buildPageContentForPreviousParagraphs();
     } else {
       this.indexParagraphFirst = +params['paragraphIndex'] || 0;
       this.buildPageContentForNextParagraphs();
     }
   }
 
-  private isChapterFinalParagraph(paragraphIndex: number) {
+  private pageThroughToChapterUpToFinalPage() {
+    const chapterFinalParagraphIndex = this.readerStateService.currentChapterParagraphCount - 1;
+    this.indexParagraphFirst = 0;
+    this.indexParagraphLast = 0;
+    while (this.indexParagraphLast < chapterFinalParagraphIndex) {
+      this.indexParagraphFirst = this.indexParagraphLast ? this.indexParagraphLast + 1 : 0;
+      this.buildPageContentForNextParagraphs();
+    }
+  }
+
+  private isIndicatingChapterFinalParagraph(paragraphIndex: number) {
     return paragraphIndex === this.readerStateService.IndexIndicatingChapterFinalParagraph;
   }
 
