@@ -16,8 +16,8 @@ export class ReadingAreaComponent implements OnInit {
   pageContent: string;
   areaScrollHeight = 0;
   areaHeight = 0;
-  indexParagraphFirst = 0;
-  indexParagraphLast = 0;
+  pageFirstParaIndex = 0;
+  pageLastParaIndex = 0;
 
   @ViewChild('readingAreaContainer') readingAreaContainer: ElementRef;
 
@@ -35,24 +35,24 @@ export class ReadingAreaComponent implements OnInit {
     const pagingDirection = params['pagingDirection'] || 'forward';
 
     if (pagingDirection === 'backward') {
-      this.indexParagraphLast = +params['paragraphIndex'] || 0;
-      if (this.isIndicatingChapterFinalParagraph(this.indexParagraphLast)) {
+      this.pageLastParaIndex = +params['paragraphIndex'] || 0;
+      if (this.isIndicatingChapterFinalParagraph(this.pageLastParaIndex)) {
         this.pageThroughToChapterUpToFinalPage();
       } else {
         this.buildPageContentForPreviousParagraphs();
       }
     } else {
-      this.indexParagraphFirst = +params['paragraphIndex'] || 0;
+      this.pageFirstParaIndex = +params['paragraphIndex'] || 0;
       this.buildPageContentForNextParagraphs();
     }
   }
 
   private pageThroughToChapterUpToFinalPage() {
     const chapterFinalParagraphIndex = this.readerStateService.currentChapterParagraphCount - 1;
-    this.indexParagraphFirst = 0;
-    this.indexParagraphLast = 0;
-    while (this.indexParagraphLast < chapterFinalParagraphIndex) {
-      this.indexParagraphFirst = this.indexParagraphLast ? this.indexParagraphLast + 1 : 0;
+    this.pageFirstParaIndex = 0;
+    this.pageLastParaIndex = 0;
+    while (this.pageLastParaIndex < chapterFinalParagraphIndex) {
+      this.pageFirstParaIndex = this.pageLastParaIndex ? this.pageLastParaIndex + 1 : 0;
       this.buildPageContentForNextParagraphs();
     }
   }
@@ -73,44 +73,44 @@ export class ReadingAreaComponent implements OnInit {
     const htmlParagraphs = this.getChapterHtmlParagraphs();
     this.pageContent = "";
 
-    this.indexParagraphFirst = this.indexParagraphLast;
-    for (let index = this.indexParagraphLast; index >= 0; index--) {
+    this.pageFirstParaIndex = this.pageLastParaIndex;
+    for (let index = this.pageLastParaIndex; index >= 0; index--) {
       const chapterContentWithoutPreviousParagraph = this.pageContent;
       const element = htmlParagraphs[index];
       this.pageContent = element.outerHTML + this.pageContent;
-      this.indexParagraphFirst--;
+      this.pageFirstParaIndex--;
 
       this.ref.detectChanges();
 
       if (this.isReadingContainerLargerThanPage()) {
         this.pageContent = chapterContentWithoutPreviousParagraph;
-        this.indexParagraphFirst++;
+        this.pageFirstParaIndex++;
         break;
       }
     }
-    this.readerStateService.setParagraphIndexes(this.indexParagraphFirst, this.indexParagraphLast);
+    this.readerStateService.setParagraphIndexes(this.pageFirstParaIndex, this.pageLastParaIndex);
   }
 
   private buildPageContentForNextParagraphs() {
     const htmlParagraphs = this.getChapterHtmlParagraphs();
     this.pageContent = "";
 
-    this.indexParagraphLast = this.indexParagraphFirst - 1;
-    for (let index = this.indexParagraphFirst; index < htmlParagraphs.length; index++) {
+    this.pageLastParaIndex = this.pageFirstParaIndex - 1;
+    for (let index = this.pageFirstParaIndex; index < htmlParagraphs.length; index++) {
       const chapterContentWithoutNextParagraph = this.pageContent;
       const element = htmlParagraphs[index];
       this.pageContent += element.outerHTML;
-      this.indexParagraphLast++;
+      this.pageLastParaIndex++;
 
       this.ref.detectChanges();
 
       if (this.isReadingContainerLargerThanPage()) {
         this.pageContent = chapterContentWithoutNextParagraph;
-        this.indexParagraphLast--;
+        this.pageLastParaIndex--;
         break;
       }
     }
-    this.readerStateService.setParagraphIndexes(this.indexParagraphFirst, this.indexParagraphLast);
+    this.readerStateService.setParagraphIndexes(this.pageFirstParaIndex, this.pageLastParaIndex);
   }
 
   private isReadingContainerLargerThanPage(): boolean {
