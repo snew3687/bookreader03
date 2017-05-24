@@ -13,7 +13,7 @@ import { ReaderStateService } from "./reader-state.service";
 })
 export class ReaderComponent implements OnInit {
   bookDescriptor: BookReaderClasses.BookDescriptor;
-  currentChapterIndex: number;
+  private _currentChapterIndex: number;
   currentFirstParagraphIndex: number;
   currentLastParagraphIndex: number;
 
@@ -22,17 +22,17 @@ export class ReaderComponent implements OnInit {
     private router: Router,
     private bookLibraryService: BookLibraryService,
     private readerStateService: ReaderStateService) {
-      this.currentChapterIndex = 0;
+      this._currentChapterIndex = 0;
       this.currentFirstParagraphIndex = 0;
       this.currentLastParagraphIndex = 0;
     }
 
   ngOnInit() {
     this.bookDescriptor = this.route.snapshot.data['bookDescriptor'];
-    this.currentChapterIndex = this.readerStateService.currentChapterIndex;
+    this._currentChapterIndex = this.readerStateService.currentChapterIndex;
 
     this.readerStateService.chapterIndexChangeEmitted$.subscribe(chapterIndex =>
-      this.currentChapterIndex = chapterIndex);
+      this._currentChapterIndex = chapterIndex);
 
     this.readerStateService.pageParagraphsChangeEmitted$.subscribe(paragraphInfo => {
       this.currentFirstParagraphIndex = paragraphInfo.firstParagraphIndex;
@@ -44,14 +44,18 @@ export class ReaderComponent implements OnInit {
     return this.bookDescriptor.bookUri;
   }
 
-  handleSelectChapter(chapterIndex: number) {
+  get currentChapterIndex(): number {
+    return this._currentChapterIndex;
+  }
+
+  set currentChapterIndex(chapterIndex: number) {
     this.router.navigate(['chapter', chapterIndex], { relativeTo: this.route });
   }
 
   handleClickPreviousPage() {
     const prevPageLastParagraphIndex = this.currentFirstParagraphIndex - 1;
     if (prevPageLastParagraphIndex < 0) {
-      if (this.currentChapterIndex === 0) {
+      if (this._currentChapterIndex === 0) {
         // Do nothing. Cannot navigate back from start of book
       } else {
         this.navigateToPreviousChapterFinalPage();
@@ -66,7 +70,7 @@ export class ReaderComponent implements OnInit {
 
     if (nextPageFirstParagraphIndex < this.currentChapterParagraphCount()) {
       this.navigateToParagraph(nextPageFirstParagraphIndex);
-    } else if (this.currentChapterIndex + 1 < this.bookDescriptor.chapterCount) {
+    } else if (this._currentChapterIndex + 1 < this.bookDescriptor.chapterCount) {
       this.navigateToNextChapterStart();
     } else {
       // Do nothing. Cannot navigate further
@@ -76,21 +80,21 @@ export class ReaderComponent implements OnInit {
   private navigateToPreviousChapterFinalPage() {
     const chapterFinalParagraphIndex = this.readerStateService.IndexIndicatingChapterFinalParagraph;
     this.router.navigate(
-        ['reader', this.bookUri, 'chapter', this.currentChapterIndex - 1, 'para', chapterFinalParagraphIndex, 'paging', 'backward' ]);
+        ['reader', this.bookUri, 'chapter', this._currentChapterIndex - 1, 'para', chapterFinalParagraphIndex, 'paging', 'backward' ]);
   }
 
   private navigateToPageEndingWithParagraph(paragraphIndex: number) {
     this.router.navigate(
-        ['reader', this.bookUri, 'chapter', this.currentChapterIndex, 'para', paragraphIndex, 'paging', 'backward' ]);
+        ['reader', this.bookUri, 'chapter', this._currentChapterIndex, 'para', paragraphIndex, 'paging', 'backward' ]);
   }
 
   private navigateToParagraph(paragraphIndex: number) {
     this.router.navigate(
-        ['reader', this.bookUri, 'chapter', this.currentChapterIndex, 'para', paragraphIndex ]);
+        ['reader', this.bookUri, 'chapter', this._currentChapterIndex, 'para', paragraphIndex ]);
   }
 
   private navigateToNextChapterStart() {
-    const nextChapterIndex = this.currentChapterIndex + 1;
+    const nextChapterIndex = this._currentChapterIndex + 1;
     this.router.navigate(['chapter', nextChapterIndex], { relativeTo: this.route });
   }
 
