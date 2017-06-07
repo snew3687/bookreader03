@@ -52,6 +52,16 @@ export class ReaderComponent implements OnInit {
     this.router.navigate(['chapter', chapterIndex], { relativeTo: this.route });
   }
 
+  get bookRating(): number {
+    return this.bookDescriptor.rating;
+  }
+
+  set bookRating(newRating: number) {
+    this.bookLibraryService.changeBookRating(this.bookDescriptor.bookUri, newRating)
+      .subscribe(descriptors => alert("Rating set"));
+  }
+
+
   handleClickPreviousPage() {
     const prevPageLastParagraphIndex = this.currentFirstParagraphIndex - 1;
     if (prevPageLastParagraphIndex < 0) {
